@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Cooper the Gentle Dragon - Page Flip</title>
+<style>
+body{
+ margin:0;background:#4b3bbd;font-family:Georgia,serif;
+ display:flex;justify-content:center;align-items:center;height:100vh;
+}
+.viewer{text-align:center}
+.book{
+ position:relative;width:900px;height:600px;perspective:2000px;
+}
+.page{
+ position:absolute;width:450px;height:600px;left:450px;
+ transform-origin:left center;
+ transform-style:preserve-3d;
+ transition:transform 1s ease;
+ cursor:pointer;
+}
+.page.flipped{transform:rotateY(-180deg);}
+.front,.back{
+ position:absolute;width:100%;height:100%;
+ backface-visibility:hidden;
+ background:white;box-shadow:0 0 15px rgba(0,0,0,.25);
+ display:flex;flex-direction:column;justify-content:center;align-items:center;
+ padding:30px;box-sizing:border-box;
+}
+.back{transform:rotateY(180deg);}
+.cover{background:linear-gradient(#8fc5ff,#d9ecff);}
+h1,h2{color:#4b3bbd}
+button{padding:10px 20px;margin:10px}
+</style>
+</head>
+<body>
+<div class="viewer">
+<div class="book" id="book"></div>
+<div>
+<button onclick="prevPage()">◀ Previous</button>
+<button onclick="nextPage()">Next ▶</button>
+</div>
+</div>
+<script>
+const data=[
+["Cooper the Gentle Dragon","A story about kindness, courage, and friendship."],
+["Chapter 1","The Whispering Wood"],
+["Chapter 2","A Gentle Giant"],
+["Chapter 3","A Village of Fear"],
+["Chapter 4","A Brave Little Girl"],
+["Chapter 5","A New Friend"],
+["Chapter 6","A Village in Uproar"],
+["Chapter 7","The Harshest Winter"],
+["Chapter 8","A Dragon's Help"],
+["Chapter 9","A New Family"],
+["The End","Kindness connected everyone."]
+];
+const book=document.getElementById('book');
+data.forEach((p,i)=>{
+ const page=document.createElement('div');
+ page.className='page';
+ page.style.zIndex=(100-i);
+ page.innerHTML=`
+ <div class="front ${i==0?'cover':''}">
+   <h1>${p[0]}</h1><p>${p[1]}</p>
+ </div>
+ <div class="back">
+   <h2>${p[0]}</h2><p>${p[1]}</p>
+ </div>`;
+ book.appendChild(page);
+});
+const pages=[...document.querySelectorAll('.page')];
+let current=0;
+function nextPage(){
+ if(current<pages.length){
+   pages[current].classList.add('flipped');
+   current++;
+ }
+}
+function prevPage(){
+ if(current>0){
+   current--;
+   pages[current].classList.remove('flipped');
+ }
+}
+</script>
+</body>
+</html>
